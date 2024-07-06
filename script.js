@@ -134,12 +134,6 @@ async function fetchOverview() {
             throw new Error('Network response was not ok ' + res.statusText);
         } 
         const jsonData = await res.json();
-        let flag, country, population, region, capital;
-        // let flag = "https://flagcdn.com/af.svg";
-        // let country = "Afghanistan";
-        // let population = "38 million";      
-        // let region = "Asia";
-        // let capital = "Kabul";
 
         const countryCart = jsonData.map(country => ({
                 flag:country.flag,
@@ -152,20 +146,6 @@ async function fetchOverview() {
         countryCart.forEach(c => {
             fillCartOverview(c.flag, c.country, c.population, c.region, c.capital)
         })
-
-        // const countryObj = jsonData.map(country => 
-        //     console.log(country.flag, country.name,country.population),
-        //     flag=country.flag,
-        //     country=country.name,
-        //     population=country.population,
-        //     region=country.region,
-        //     capital=country.capital,
-        //     console.log(flag, country, population, region, capital),
-            
-        //     fillCartOverview(flag, country, population, region, capital)
-        // )
-
-        // return countryObj;
     } 
     catch (error){
         console.log("Error catched at fetching regions: ", error)
