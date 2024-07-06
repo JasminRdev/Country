@@ -38,6 +38,8 @@ function createOptionsRegion(regionName) {
 
 async function fetchAndCreateOptionsRegion() {
     const regions = await fetchRegions();
+    regions.sort();
+    console.log(regions)
     regions.map(x => createOptionsRegion(x))
 }
 
@@ -48,6 +50,7 @@ function changedRegion() {
 }
 
 document.addEventListener('DOMContentLoaded', (event) => {
+
     const filterComponent = document.getElementById("regions_drp")
     filterComponent.addEventListener('change', changedRegion)
     // fetchData(filterComponent)
@@ -57,3 +60,119 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
 
 fetchAndCreateOptionsRegion();
+
+function fillCartOverview(flag, country, population, region, capital){
+    const sectionGroup = document.getElementById("country-container_section")
+
+    const article = document.createElement('article')
+    article.className = "country-el_article"
+    article.id = "country-el_article"
+
+
+    const img = document.createElement('img')   
+    img.src = flag
+    img.alt = country +" Flag"
+    img.className = "country-flag"
+
+
+    const countryInfo = document.createElement('div')
+    countryInfo.className = "country-info"
+
+
+    const countryName = document.createElement('h3')
+    countryName.className = "country-name"
+    countryName.innerHTML = country
+
+
+    const countryPopulationResult = document.createElement('p')
+    const countryPopulationLabel = document.createElement('span')
+    countryPopulationResult.className = "bold-font"
+    countryPopulationLabel.innerHTML = population
+    countryPopulationLabel.className = "normal-font"
+
+    countryPopulationResult.innerHTML = "Population: "
+    countryPopulationResult.appendChild(countryPopulationLabel)
+
+    
+    const countryRegionResult = document.createElement('p')
+    const countryRegionLabel = document.createElement('span')
+    countryRegionResult.className = "bold-font"
+    countryRegionLabel.innerHTML = region
+    countryRegionLabel.className = "normal-font"
+
+    countryRegionResult.innerHTML = "Region: "
+    countryRegionResult.appendChild(countryRegionLabel)
+
+    
+    const countryCapitalResult = document.createElement('p')
+    const countryCapitalLabel = document.createElement('span')
+    countryCapitalResult.className = "bold-font"
+    countryCapitalLabel.innerHTML = capital
+    countryCapitalLabel.className = "normal-font"
+
+    countryCapitalResult.innerHTML = "Capital: "
+    countryCapitalResult.appendChild(countryCapitalLabel)
+
+    
+    countryInfo.appendChild(countryName)
+    countryInfo.appendChild(countryPopulationResult)
+    countryInfo.appendChild(countryRegionResult)
+    countryInfo.appendChild(countryCapitalResult)
+
+
+    article.appendChild(img)
+    article.appendChild(countryInfo)
+
+    sectionGroup.appendChild(article)
+
+}
+
+async function fetchOverview() {
+    try{
+        const res = await fetch('./data.json');
+        if(!res.ok) {
+            throw new Error('Network response was not ok ' + res.statusText);
+        } 
+        const jsonData = await res.json();
+        let flag, country, population, region, capital;
+        // let flag = "https://flagcdn.com/af.svg";
+        // let country = "Afghanistan";
+        // let population = "38 million";      
+        // let region = "Asia";
+        // let capital = "Kabul";
+
+        const countryCart = jsonData.map(country => ({
+                flag:country.flag,
+                country:country.name,
+                population:country.population,
+                region:country.region,
+                capital:country.capital
+        }))
+           
+        countryCart.forEach(c => {
+            fillCartOverview(c.flag, c.country, c.population, c.region, c.capital)
+        })
+
+        // const countryObj = jsonData.map(country => 
+        //     console.log(country.flag, country.name,country.population),
+        //     flag=country.flag,
+        //     country=country.name,
+        //     population=country.population,
+        //     region=country.region,
+        //     capital=country.capital,
+        //     console.log(flag, country, population, region, capital),
+            
+        //     fillCartOverview(flag, country, population, region, capital)
+        // )
+
+        // return countryObj;
+    } 
+    catch (error){
+        console.log("Error catched at fetching regions: ", error)
+        return []
+    }
+}
+
+
+fetchOverview();
+

@@ -17,7 +17,7 @@
 
 html, body{
     font-family: "Nunito Sans", sans-serif;
-
+    box-sizing: border-box;
     margin: 0;
     padding: 0;
 
@@ -27,14 +27,25 @@ header{
     display: flex;
     justify-content: space-between;
     padding: 0 4rem 0 4rem;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    
+    box-shadow: 0 2rem 5rem rgba(0, 0, 0, 0.3);
+
+    background-color: var(--dark_m_txt_light_m_el);
 
 }
+
+
 
 .dark-mode{
     display: flex;
     align-items: center;    
+}
+
+.bold-font{
+    font-weight: bold;
+}
+
+.normal-font{
+    font-weight: normal;
 }
 
 .icon-moon{
@@ -45,9 +56,125 @@ main{
     background-color: var(--light_m_bg);
 }
 
+/* search country */
+.search_for_country_i{
+    padding: .9rem 2rem .9rem 4rem;
+    color: var(--light_m_inp_dark_gray);
+    font-family: "Nunito Sans", sans-serif;
+    width: 25rem;
+    border: none;
+}
+
+.search-container-country_f{
+    position: relative;
+}
+
+.search_icon{
+    position: absolute;
+    display:inline-block;
+    width:1.2rem;
+    height:1.2rem;
+    left: 1.7rem;
+    top:50%;
+    transform: translateY(-50%);
+    color: var(--light_m_inp_dark_gray);
+}
+
+/* search region */
+.search_for_country_s{
+    padding: .9rem 2rem .9rem 1.2rem;
+    color: var(--light_m_txt);
+    border: transparent;
+    border-right: 1rem solid transparent;
+    font-family: "Nunito Sans", sans-serif;
+}
+
+.search_for_country_span *{
+    font-family: "Nunito Sans", sans-serif;
+    padding: 2rem 0;
+    color: red;
+    background-color: red;
+}
+
+
+/* container of both searches */
+.search-container{
+    display: flex;
+    justify-content: space-between;
+    padding: 3rem 7rem 1.5rem 7rem;
+}
+
+.standard-border-shadow{
+    box-shadow: 0 0 .5rem rgba(61, 61, 61, 0.1);
+    border-radius: .3rem;
+}
+
+
+/* country container */
+.country-container_section{
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(13rem, 1fr));
+    grid-gap: 4rem;
+    padding: 2rem 7rem 3rem 7rem;
+}
+.country-flag{
+    width: 100%;
+    object-fit: contain;
+    border-radius: .3rem;
+
+}
+
+.country-el_article{
+    background-color: var(--dark_m_txt_light_m_el);
+    box-shadow: 0 0 .5rem rgba(61, 61, 61, 0.1);
+    border-radius: .3rem;
+}
+
+.country-info{
+    padding: 1rem 1.3rem 2rem 1.5rem;
+}
+
+
+.country-info > * {
+    margin: .5rem 0;
+}
+
+.country-name{
+    padding-bottom: 1rem;
+}
+
+
 /* 600/< */
-@media only screen and (max-width: 600px) {
+@media only screen and (max-width: 53em) {
     body {
       background-color: lightblue;
     }
+    
+    /* header */
+
+    header{
+        padding:1rem 1.4rem;
+    }
+
+    .header-title{
+        font-size: 1rem;
+    }
+    /* container of both searches */
+    .search-container{
+        display: grid;
+        grid-gap: 2rem;
+        padding: 1.2rem 1.6rem;
+    }
+
+    .search_for_country_i {
+        width: 20rem;
+    }
+
+
+    /* country container */
+    .country-container_section{
+        padding: 3rem 3rem;
+    }
+
   }
+

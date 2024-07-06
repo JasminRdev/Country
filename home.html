@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>HTML 5 Boilerplate</title>
+    <title>Where in the world?</title>
     
     <script type="module" src="script.js"></script>
     <script src="index.js"></script>
@@ -19,19 +19,35 @@
   </head>
   <body>
     <header>
-      <h2 class="header-title">Where in the world?</h2>
+      <h2 class="header-title bold-font">Where in the world?</h2>
       <div class="dark-mode">
         <ion-icon name="moon-outline" class="icon-moon"></ion-icon>
-        <p>Dark Mode</p>
+        <p class="bold-font">Dark Mode</p>
       </div>
     </header>
     <main>
-      <form role="search" class="search-container">
-        <input type="text" class="search-input" id="search" placeholder="Search for a country">
-        <select name="regions" id="regions_drp">
-          <option selected>Filter by Region</option>
-        </select>
-      </form>
+      <div class="search-container">
+        <form role="search" class="search-container-country_f">
+          <input type="search" class="search_for_country_i standard-border-shadow" id="search_for_country" placeholder="Search for a country" aria-label="Search"><ion-icon name="search" id="search_icon" class="search_icon"></ion-icon>
+        </form> 
+        <form role="search" class="search-container-region_f"> 
+          <select name="regions" id="regions_drp" class="search_for_country_s standard-border-shadow">
+            <option selected><span class="search_for_country_span">Filter by Region</span></option>
+          </select>
+        </form>
+      </div>
+
+
+
+
+      <section class="country-container_section" id="country-container_section">
+
+        
+      </section>
+
+
+
+
 
     </main>
   </body>
