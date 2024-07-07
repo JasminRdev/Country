@@ -1,15 +1,4 @@
 
-async function fetchData(filterComponent){
-    try {
-        const res = await fetch('./data.json');
-        if(!res.ok) {
-            throw new Error('Network response was not ok ' + res.statusText);
-        } 
-        return res.json();
-    } 
-    catch (err) {console.log("err at fetchData ", err)}
-}
-
 async function fetchRegions() {
     try{
         const res = await fetch('./data.json');
@@ -39,27 +28,9 @@ function createOptionsRegion(regionName) {
 async function fetchAndCreateOptionsRegion() {
     const regions = await fetchRegions();
     regions.sort();
-    console.log(regions)
     regions.map(x => createOptionsRegion(x))
 }
 
-
-function changedRegion() {
-    const filterComponent = document.getElementById("regions_drp")
-    console.log(filterComponent.value)
-}
-
-document.addEventListener('DOMContentLoaded', (event) => {
-
-    const filterComponent = document.getElementById("regions_drp")
-    filterComponent.addEventListener('change', changedRegion)
-    // fetchData(filterComponent)
-    // console.log("DOM fully loaded and parsed");
-    }
-)
-
-
-fetchAndCreateOptionsRegion();
 
 function fillCartOverview(flag, country, population, region, capital){
     const sectionGroup = document.getElementById("country-container_section")
@@ -127,13 +98,46 @@ function fillCartOverview(flag, country, population, region, capital){
 
 }
 
-async function fetchOverview() {
+async function fetchOverview(regionFilter, countryFilter) {
     try{
         const res = await fetch('./data.json');
         if(!res.ok) {
             throw new Error('Network response was not ok ' + res.statusText);
         } 
-        const jsonData = await res.json();
+        let jsonData = await res.json();
+
+        const getOnlyCountry = () => {
+            jsonData = jsonData.filter(country => country.name.toLowerCase().includes(countryFilter.toLowerCase()))
+            jsonData.sort((a, b) => {
+                const aStartsWith = a.name.toLowerCase().startsWith(countryFilter.toLowerCase());
+                const bStartsWith = b.name.toLowerCase().startsWith(countryFilter.toLowerCase());
+        
+                if (aStartsWith && !bStartsWith) {
+                    return -1;
+                } else if (!aStartsWith && bStartsWith) {
+                    return 1;
+                } else {
+                    return a.name.localeCompare(b.name);
+                }
+            });
+        }
+
+        const getOnlyRegion = () => {
+            jsonData = jsonData.filter(country => country.region === regionFilter)
+        }
+
+        if(regionFilter && !countryFilter) {
+           getOnlyRegion()
+        }
+
+        if(countryFilter && !regionFilter) {
+            getOnlyCountry()
+        }
+
+        if(regionFilter && countryFilter) {
+            getOnlyRegion()
+            getOnlyCountry()
+        }
 
         const countryCart = jsonData.map(country => ({
                 flag:country.flag,
@@ -153,6 +157,62 @@ async function fetchOverview() {
     }
 }
 
+function removeAllCountries() {
+    let element = document.getElementById('country-container_section');
+    while(element.firstChild){
+        element.removeChild(element.firstChild);
+    }
+}
 
-fetchOverview();
 
+function changedRegion(e) {
+    const filterComponent = document.getElementById("regions_drp")    
+    const filterByCountry = document.getElementById("search_for_country")
+    
+    removeAllCountries()
+    
+    if(filterByCountry.value != "") {
+        fetchOverview(filterComponent.value, filterByCountry.value)
+    } else {
+            
+        fetchOverview(filterComponent.value, false)
+    }
+}
+
+function changedCountry(e) {
+    e.preventDefault();
+    
+    const filterByCountry = document.getElementById("search_for_country")
+    const filterComponent = document.getElementById("regions_drp")
+    removeAllCountries()
+
+    if(filterComponent.value != "Filter by Region") {
+        fetchOverview(filterComponent.value, filterByCountry.value)
+    } else {
+        
+        fetchOverview(false, filterByCountry.value)
+    }
+    
+}
+
+function preventReload(e) {
+    e.preventDefault();
+}
+
+document.addEventListener('DOMContentLoaded', (event) => {
+    
+    fetchAndCreateOptionsRegion();
+
+    const filterComponent = document.getElementById("regions_drp")
+    filterComponent.addEventListener('change', changedRegion)
+
+    const filterByCountry = document.getElementById("search_for_country")
+    filterByCountry.addEventListener("input", changedCountry)
+
+    const filter = document.getElementById("search_for_country_f")
+    filter.addEventListener("submit", preventReload)
+
+    fetchOverview(false, false);
+
+    }
+)
