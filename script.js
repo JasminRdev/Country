@@ -204,15 +204,38 @@ document.addEventListener('DOMContentLoaded', (event) => {
     fetchAndCreateOptionsRegion();
 
     const filterComponent = document.getElementById("regions_drp")
-    filterComponent.addEventListener('change', changedRegion)
+    if(filterComponent) {
+        filterComponent.addEventListener('change', changedRegion)
+    }
 
     const filterByCountry = document.getElementById("search_for_country")
-    filterByCountry.addEventListener("input", changedCountry)
-
+    if(filterByCountry) {
+        filterByCountry.addEventListener('input', changedCountry)
+    }
+    
     const filter = document.getElementById("search_for_country_f")
-    filter.addEventListener("submit", preventReload)
+    if(filter) {
+        filter.addEventListener("submit", preventReload)
+    }
 
     fetchOverview(false, false);
 
     }
 )
+
+
+async function fetchSingleCard() {
+    try{
+                
+        let res = await fetch("./data.json")
+        res = await res.json()
+        let singleCardInfos = res.filter(c => c.name === "Germany")
+        console.log(singleCardInfos)
+        // language is obj -> name
+        // alpha3Code border
+    } catch (e) {
+        console.log("Error catched at fetching single card: ", e)
+    }
+}
+
+fetchSingleCard()
